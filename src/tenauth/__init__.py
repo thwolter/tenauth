@@ -3,7 +3,7 @@ from .fastapi import (
     require_access_context,
     require_auth,
 )
-from .models import AccessContext, AuthContext
+from .schemas import AccessContext, AuthContext
 from .session import (
     SessionFactory,
     access_scoped_session_ctx,

@@ -9,7 +9,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.testclient import TestClient
 
 from tenauth.fastapi import require_auth
-from tenauth.models import AuthContext
+from tenauth.schemas import AuthContext
 
 # Provided signed JWT (HS256) with claims:
 # sub: 0c67622b-fcc5-4b58-9998-421b73e48df9

@@ -6,7 +6,7 @@ from fastapi import Depends, HTTPException, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from .models import AccessContext, AuthContext
+from .schemas import AccessContext, AuthContext
 from .session import SessionFactory, access_scoped_session_ctx
 
 bearer_scheme = HTTPBearer(auto_error=False)

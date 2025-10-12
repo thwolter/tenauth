@@ -8,7 +8,7 @@ from uuid import UUID
 from sqlalchemy import text
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from .models import AccessContext
+from .schemas import AccessContext
 
 SessionFactory = Callable[[], AsyncContextManager[AsyncSession]]
 
