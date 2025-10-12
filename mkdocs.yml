@@ -1,0 +1,19 @@
+site_name: Tenauth
+site_description: Multi-tenant authentication helpers for FastAPI and SQLModel projects.
+site_author: Tenauth Contributors
+theme:
+  name: readthedocs
+nav:
+  - Overview: index.md
+  - FastAPI Integration: fastapi.md
+  - Session Management: session.md
+  - Models & Auth: models.md
+  - Tenancy Utilities: tenancy.md
+  - Development Guide: development.md
+markdown_extensions:
+  - admonition
+  - codehilite
+  - def_list
+  - footnotes
+  - toc:
+      permalink: true
