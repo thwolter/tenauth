@@ -1,4 +1,4 @@
-from urllib.parse import parse_qsl, urlencode, urlparse, urlunparse
+from urllib.parse import parse_qsl, quote, urlencode, urlparse, urlunparse
 from uuid import UUID
 
 
@@ -14,7 +14,7 @@ def dsn_with_tenant(dsn: str, tenant_id: UUID) -> str:
     else:
         opts = new_opt
     query["options"] = opts
-    new_query = urlencode(query, doseq=True)
+    new_query = urlencode(query, doseq=True, quote_via=quote)  # type: ignore[bad-argument-type]
     return urlunparse(
         (
             parsed.scheme,
