@@ -2,7 +2,7 @@ site_name: Tenauth
 site_description: Multi-tenant authentication helpers for FastAPI and SQLModel projects.
 site_author: Tenauth Contributors
 theme:
-  name: readthedocs
+  name: material
 nav:
   - Overview: index.md
   - FastAPI Integration: fastapi.md
