@@ -12,6 +12,12 @@ dependencies = [
     "sqlmodel>=0.0.27",
 ]
 
+[project.urls]
+Homepage = "https://thwolter.github.io/tenauth/"
+Repository = "https://github.com/thwolter/tenauth.git"
+Documentation = "https://thwolter.github.io/tenauth/"
+Issues = "https://github.com/thwolter/tenauth/issues/"
+
 [tool.setuptools.package-dir]
     "" = "src"
 
