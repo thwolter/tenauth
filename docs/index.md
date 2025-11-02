@@ -7,6 +7,8 @@ Tenauth provides a focused toolkit for building multi-tenant FastAPI services ba
 - **Tenant-Scoped Sessions** – `tenauth.session.access_scoped_session_ctx` applies Postgres GUCs to each connection, keeping tenant and user scope consistent.
 - **FastAPI Dependencies** – `tenauth.fastapi.require_auth` and `build_access_scoped_session_dependency` wire the auth and session layers into your routers.
 - **DSN Augmentation** – `tenauth.tenancy.dsn_with_tenant` injects tenant identifiers into connection strings for background jobs or migrations.
+- **WebSocket Handshakes** – `tenauth.websocket.websocket_access_context` extracts tenant/user identifiers from websocket headers, query parameters, or negotiated protocols.
+- **Testing Utilities** – `tenauth.utils.create_bearer_token` assembles unsigned bearer tokens ready for HTTP or websocket test clients.
 
 ## Installation
 ```bash

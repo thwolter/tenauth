@@ -39,3 +39,24 @@ SessionDep = build_access_scoped_session_dependency(
 )
 ```
 Skipping verification removes the extra roundtrip to confirm the settings—but only use it when you trust the database connection pool configuration.
+
+## WebSocket Authentication
+`websocket_access_context` mirrors the HTTP dependency flow for websocket handshakes. It inspects the Authorization header, `access_token` query parameter, or `Sec-WebSocket-Protocol` entries—accepting either raw tokens or `Bearer`-prefixed strings.
+```python
+from fastapi import FastAPI
+from starlette.websockets import WebSocket
+
+from tenauth.websocket import websocket_access_context
+
+app = FastAPI()
+
+@app.websocket("/ws")
+async def ws_channel(websocket: WebSocket):
+    access_ctx = await websocket_access_context(websocket)
+    await websocket.accept()
+    await websocket.send_json({
+        "tenant": str(access_ctx.tenant_id),
+        "user": str(access_ctx.user_id),
+    })
+```
+Tokens rejected by `AuthContext.from_token` become `WebSocketException` errors with the same policy-violation code FastAPI uses for missing or malformed authentication.

@@ -19,6 +19,18 @@ auth = AuthContext.from_token(encoded_jwt)
 print(auth.sub, auth.tid, auth.scopes)
 ```
 
+### Generating Unsigned Tokens for Testing
+For local integration tests you can build lightweight bearer tokens without signing steps:
+```python
+from tenauth.models import AuthContext
+from tenauth.utils import create_bearer_token
+
+auth = AuthContext.from_token(encoded_jwt)
+token = create_bearer_token(auth)
+# Inject `token` into Authorization headers or websocket handshakes.
+```
+`create_bearer_token` returns an unsigned JWT-style string prefixed with `Bearer `. Optional fields set to `None` are omitted from the payload so you can shape tokens with only the required claims.
+
 ## AccessContext
 `AccessContext` is a minimal tenant/user pair used by the session helpers.
 
