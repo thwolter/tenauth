@@ -332,6 +332,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#generating-unsigned-tokens-for-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generating Unsigned Tokens for Testing
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -452,6 +461,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#generating-unsigned-tokens-for-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generating Unsigned Tokens for Testing
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -507,6 +525,17 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">sub</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">tid</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">scopes</span><span class="p">)</span>
 </code></pre></div>
 
+<h3 id="generating-unsigned-tokens-for-testing">Generating Unsigned Tokens for Testing<a class="headerlink" href="#generating-unsigned-tokens-for-testing" title="Permanent link">&para;</a></h3>
+<p>For local integration tests you can build lightweight bearer tokens without signing steps:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tenauth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthContext</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tenauth.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_bearer_token</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">AuthContext</span><span class="o">.</span><span class="n">from_token</span><span class="p">(</span><span class="n">encoded_jwt</span><span class="p">)</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">create_bearer_token</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+<span class="c1"># Inject `token` into Authorization headers or websocket handshakes.</span>
+</code></pre></div>
+
+<p><code>create_bearer_token</code> returns an unsigned JWT-style string prefixed with <code>Bearer</code>. Optional fields set to <code>None</code> are omitted from the payload so you can shape tokens with only the required claims.</p>
 <h2 id="accesscontext">AccessContext<a class="headerlink" href="#accesscontext" title="Permanent link">&para;</a></h2>
 <p><code>AccessContext</code> is a minimal tenant/user pair used by the session helpers.</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">tenauth.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessContext</span>

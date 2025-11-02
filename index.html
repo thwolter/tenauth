@@ -467,6 +467,8 @@
 <li><strong>Tenant-Scoped Sessions</strong> – <code>tenauth.session.access_scoped_session_ctx</code> applies Postgres GUCs to each connection, keeping tenant and user scope consistent.</li>
 <li><strong>FastAPI Dependencies</strong> – <code>tenauth.fastapi.require_auth</code> and <code>build_access_scoped_session_dependency</code> wire the auth and session layers into your routers.</li>
 <li><strong>DSN Augmentation</strong> – <code>tenauth.tenancy.dsn_with_tenant</code> injects tenant identifiers into connection strings for background jobs or migrations.</li>
+<li><strong>WebSocket Handshakes</strong> – <code>tenauth.websocket.websocket_access_context</code> extracts tenant/user identifiers from websocket headers, query parameters, or negotiated protocols.</li>
+<li><strong>Testing Utilities</strong> – <code>tenauth.utils.create_bearer_token</code> assembles unsigned bearer tokens ready for HTTP or websocket test clients.</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <div class="codehilite"><pre><span></span><code>uv<span class="w"> </span>pip<span class="w"> </span>sync

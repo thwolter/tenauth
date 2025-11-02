@@ -296,6 +296,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#websocket-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      WebSocket Authentication
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -445,6 +454,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#websocket-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      WebSocket Authentication
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -498,6 +516,26 @@
 </code></pre></div>
 
 <p>Skipping verification removes the extra roundtrip to confirm the settings—but only use it when you trust the database connection pool configuration.</p>
+<h2 id="websocket-authentication">WebSocket Authentication<a class="headerlink" href="#websocket-authentication" title="Permanent link">&para;</a></h2>
+<p><code>websocket_access_context</code> mirrors the HTTP dependency flow for websocket handshakes. It inspects the Authorization header, <code>access_token</code> query parameter, or <code>Sec-WebSocket-Protocol</code> entries—accepting either raw tokens or <code>Bearer</code>-prefixed strings.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">starlette.websockets</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebSocket</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">tenauth.websocket</span><span class="w"> </span><span class="kn">import</span> <span class="n">websocket_access_context</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">websocket</span><span class="p">(</span><span class="s2">&quot;/ws&quot;</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ws_channel</span><span class="p">(</span><span class="n">websocket</span><span class="p">:</span> <span class="n">WebSocket</span><span class="p">):</span>
+    <span class="n">access_ctx</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket_access_context</span><span class="p">(</span><span class="n">websocket</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">websocket</span><span class="o">.</span><span class="n">send_json</span><span class="p">({</span>
+        <span class="s2">&quot;tenant&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">access_ctx</span><span class="o">.</span><span class="n">tenant_id</span><span class="p">),</span>
+        <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">access_ctx</span><span class="o">.</span><span class="n">user_id</span><span class="p">),</span>
+    <span class="p">})</span>
+</code></pre></div>
+
+<p>Tokens rejected by <code>AuthContext.from_token</code> become <code>WebSocketException</code> errors with the same policy-violation code FastAPI uses for missing or malformed authentication.</p>
 
 
 
