@@ -38,13 +38,14 @@ from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from tenauth.fastapi import build_access_scoped_session_dependency, require_auth
+from tenauth.fastapi import build_access_scoped_session_dependency, get_auth_context
 from tenauth.schemas import AuthContext
 
 engine = create_async_engine("postgresql+psycopg://svc@db/app", echo=False)
 sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
 
 app = FastAPI()
+
 
 @asynccontextmanager
 async def session_factory() -> AsyncIterator[AsyncSession]:
@@ -54,11 +55,14 @@ async def session_factory() -> AsyncIterator[AsyncSession]:
     finally:
         await session.close()
 
+
 SessionDep = build_access_scoped_session_dependency(session_factory=session_factory)
 
+
 @app.get("/me")
-def read_profile(auth: AuthContext = Depends(require_auth)):
+def read_profile(auth: AuthContext = Depends(get_auth_context)):
     return {"user_id": str(auth.sub), "tenant_id": str(auth.tid)}
+
 
 @app.get("/widgets")
 async def list_widgets(session: AsyncSession = Depends(SessionDep)):

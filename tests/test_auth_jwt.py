@@ -8,7 +8,7 @@ import pytest
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.testclient import TestClient
 
-from tenauth.fastapi import require_auth
+from tenauth.fastapi import get_auth_context, get_bearer_token
 from tenauth.schemas import AuthContext
 
 # Provided signed JWT (HS256) with claims:
@@ -28,6 +28,16 @@ def _decode_payload(token: str) -> dict:
     header, payload, _sig = token.split(".")
     padded = payload + "=" * (-len(payload) % 4)
     return json.loads(base64.urlsafe_b64decode(padded).decode("utf-8"))
+
+
+def _build_token_app():
+    app = FastAPI()
+
+    @app.get("/token")
+    def token_header(token: str = Depends(get_bearer_token)):
+        return {"token": token}
+
+    return app
 
 
 def test_authcontext_from_token_parses_fields():
@@ -59,7 +69,7 @@ def test_require_auth_accepts_bearer_token():
     app = FastAPI()
 
     @app.get("/whoami")
-    def whoami(auth: AuthContext = Depends(require_auth)):
+    def whoami(auth: AuthContext = Depends(get_auth_context)):
         return {"sub": str(auth.sub), "tid": str(auth.tid), "role": auth.role}
 
     client = TestClient(app)
@@ -75,7 +85,7 @@ def test_require_auth_rejects_missing_header():
     app = FastAPI()
 
     @app.get("/secure")
-    def secure(_auth: AuthContext = Depends(require_auth)):
+    def secure(_auth: AuthContext = Depends(get_auth_context)):
         return {"ok": True}
 
     client = TestClient(app)
@@ -87,11 +97,30 @@ def test_require_auth_rejects_wrong_scheme():
     app = FastAPI()
 
     @app.get("/secure")
-    def secure(_auth: AuthContext = Depends(require_auth)):
+    def secure(_auth: AuthContext = Depends(get_auth_context)):
         return {"ok": True}
 
     client = TestClient(app)
     r = client.get("/secure", headers={"Authorization": f"Basic {JWT_TOKEN}"})
+    assert r.status_code == 401
+
+
+def test_require_auth_token_returns_token():
+    client = TestClient(_build_token_app())
+    r = client.get("/token", headers={"Authorization": f"Bearer {JWT_TOKEN}"})
+    assert r.status_code == 200
+    assert r.json()["token"] == JWT_TOKEN
+
+
+def test_require_auth_token_missing_header():
+    client = TestClient(_build_token_app())
+    r = client.get("/token")
+    assert r.status_code == 401
+
+
+def test_require_auth_token_invalid_scheme():
+    client = TestClient(_build_token_app())
+    r = client.get("/token", headers={"Authorization": f"Basic {JWT_TOKEN}"})
     assert r.status_code == 401
 
 

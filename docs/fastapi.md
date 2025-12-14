@@ -3,15 +3,17 @@
 FastAPI dependencies in Tenauth minimise boilerplate for enforcing bearer authentication and tenant scoping.
 
 ## Requiring Authentication
+
 ```python
 from fastapi import Depends, FastAPI
-from tenauth.fastapi import require_auth
+from tenauth.fastapi import get_auth_context
 from tenauth.models import AuthContext
 
 app = FastAPI()
 
+
 @app.get("/me")
-def read_profile(auth: AuthContext = Depends(require_auth)):
+def read_profile(auth: AuthContext = Depends(get_auth_context)):
     return {"user_id": str(auth.sub), "tenant_id": str(auth.tid)}
 ```
 `require_auth` extracts the bearer token, validates the scheme, and returns an `AuthContext`. Invalid or missing tokens raise `HTTPException(status_code=401)` automatically.
