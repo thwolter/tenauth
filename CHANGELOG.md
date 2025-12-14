@@ -1,3 +1,9 @@
+## 0.3.0 (2025-12-14)
+
+### Feat
+
+- expose core utilities and dependencies via `__all__`
+
 ## 0.2.1 (2025-12-14)
 
 ### Refactor
