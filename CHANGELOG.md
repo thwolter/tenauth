@@ -1,3 +1,9 @@
+## 0.2.1 (2025-12-14)
+
+### Refactor
+
+- refactor authentication flow and deprecate old methods
+
 ## 0.2.0 (2025-11-02)
 
 ### Feat
